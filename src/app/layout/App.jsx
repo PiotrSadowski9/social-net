@@ -1,4 +1,5 @@
 import React from 'react';
+import { Container } from 'semantic-ui-react';
 import EventDashboard from '../../features/events/eventDashboard/EventDashboard';
 import NavBar from '../../features/nav/NavBar';
 
@@ -6,11 +7,13 @@ import NavBar from '../../features/nav/NavBar';
 
 function App() {
   return (
-    <div>
-      <h1>Dupa</h1>
+    <>
       <NavBar/>
-      <EventDashboard/>
-    </div>
+      <Container className={'main'}>
+        <EventDashboard/>
+      </Container>
+      
+    </>
   );
 }
 
