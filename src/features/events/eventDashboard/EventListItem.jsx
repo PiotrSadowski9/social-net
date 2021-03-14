@@ -34,7 +34,7 @@ export default function EventListItem() {
                 </List>
             </Segment>
             <Segment clearing>
-                <span>Desctiption of event</span>
+                <div>Desctiption of event</div>
                 <Button color='teal' floated='right' content='View'/>
             </Segment>
         </Segment.Group>
