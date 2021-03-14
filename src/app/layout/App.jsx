@@ -1,10 +1,15 @@
+import React from 'react';
+import EventDashboard from '../../features/events/eventDashboard/EventDashboard';
+import NavBar from '../../features/nav/NavBar';
 
-import '../../App.css';
+
 
 function App() {
   return (
-    <div className="App">
-      dupa twoja
+    <div>
+      <h1>Dupa</h1>
+      <NavBar/>
+      <EventDashboard/>
     </div>
   );
 }
