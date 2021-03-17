@@ -6,7 +6,7 @@ import NavBar from '../../features/nav/NavBar';
 
 
 function App() {
-  const [formOpen, setFormOpen] = useState(false);
+  const [formOpen, setFormOpen] = useState(true);
   return (
     <>
       <NavBar setFormOpen={setFormOpen}/>
