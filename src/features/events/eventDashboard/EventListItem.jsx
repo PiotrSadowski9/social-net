@@ -35,7 +35,7 @@ export default function EventListItem({event,selectEvent}) {
             </Segment>
             <Segment clearing>
                 <div>{event.desctiption}</div>
-                <Button onclick={() => selectEvent(event)} color='teal' floated='right' content='View'/>
+                <Button onClick={() => selectEvent(event)} color='teal' floated='right' content='View'/>
             </Segment>
         </Segment.Group>
        

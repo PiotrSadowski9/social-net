@@ -21,9 +21,9 @@ function handleCreateFormOpen() {
 
   return (
     <>
-      <NavBar setFormOpen={setFormOpen}/>
+      <NavBar setFormOpen={handleCreateFormOpen}/>
       <Container className={'main'}>
-        <EventDashboard formOpen={formOpen} setFormOpen={setFormOpen}/>
+        <EventDashboard formOpen={formOpen} setFormOpen={setFormOpen} selectEvent={handleSelectEvent} selectedEvent={selectedEvent}/>
       </Container>
       
     </>
