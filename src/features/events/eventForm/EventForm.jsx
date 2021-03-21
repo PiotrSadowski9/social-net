@@ -2,7 +2,7 @@ import cuid from 'cuid';
 import React, { useState } from 'react'
 import { Button, Form, Header, Segment} from 'semantic-ui-react'
 
-export default function EventForm({setFormOpen,setEvents,createEvent,selectedEvent}) {
+export default function EventForm({setFormOpen,setEvents,createEvent,selectedEvent,updateEvent}) {
     const initialValues = selectedEvent ?? {
         title:'',
         category:'',
@@ -14,7 +14,10 @@ export default function EventForm({setFormOpen,setEvents,createEvent,selectedEve
     const [values,setValues] = useState(initialValues);
 
     function handleFormSubmit() { //Tworzę nowy event z podanych wartości
-        createEvent({...values,
+
+        selectedEvent 
+        ? updateEvent({...selectedEvent,...values}) //zachowuję dotychczasowe dane i nadpisuję te zmienione
+        : createEvent({...values,
                     id:cuid(),
                     hostedBy:'Bob',
                     attendees:[],
