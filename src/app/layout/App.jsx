@@ -25,14 +25,23 @@ function handleCreateFormOpen() {
 
   return (
     <>
-      <NavBar setFormOpen={handleCreateFormOpen}/>
-      <Container className={'main'}>
-        {/* <EventDashboard formOpen={formOpen} setFormOpen={setFormOpen} selectEvent={handleSelectEvent} selectedEvent={selectedEvent}/> */}
-        <Route exact path='/' component={HomePage}/>
-        <Route exact path='/events' component={EventDashboard}/>
-        <Route path='/events/:id' component={EventDetailedPage}/>
-        <Route path='/createEvent' component={EventForm}/>
-      </Container>
+      <Route exact path='/' component={HomePage}/>
+      <Route 
+        path={'/(.+)'} //wszystko co ma slash plus coś
+        render={() => (
+          <>
+            <NavBar setFormOpen={handleCreateFormOpen}/>
+            <Container className={'main'}>
+            {/* <EventDashboard formOpen={formOpen} setFormOpen={setFormOpen} selectEvent={handleSelectEvent} selectedEvent={selectedEvent}/> */}
+        
+              <Route exact path='/events' component={EventDashboard}/>
+              <Route path='/events/:id' component={EventDetailedPage}/>
+              <Route path='/createEvent' component={EventForm}/>
+            </Container>
+          </>
+        )}
+      />
+      
       
     </>
   );
