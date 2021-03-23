@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Button, Form, Header, Segment} from 'semantic-ui-react';
 import {createEvent, updateEvent} from '../eventActions'
 
-export default function EventForm({match}) {
+export default function EventForm({match,history}) {
     
     const dispatch = useDispatch(); //dane ze stora
     const selectedEvent = useSelector(state => state.event.events.find(e => e.id === match.params.id)) //wybieram konkretny event ze stora w oparciu o id eventu
@@ -29,6 +29,7 @@ export default function EventForm({match}) {
                     hostedBy:'Bob',
                     attendees:[],
                     hostPhotoURL:'/assets/user.png'}));
+        history.push('/events') // po utworzeniu eventu przenosi na strone z eventami
        
     }
     function handleInputChange(e){

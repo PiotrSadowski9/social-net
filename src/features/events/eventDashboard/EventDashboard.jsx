@@ -8,25 +8,11 @@ export default function EventDashboard() {
     const {events} = useSelector(state => state.event); //pobieram dane ze Stora
     
 
-    // function handleCreateEvent(event) {
-    //     setEvents([...events,event])
-    // }
-
-    // function handleUpdateEvent(updatedEvent){
-    //     setEvents(events.map(evt => evt.id === updatedEvent.id ? updatedEvent : evt));
-       
-        
-    // }
-
-    function handleDeleteEvent(eventId){
-        // setEvents(events.filter(evt => evt.id !== eventId));
-    }
-
     
     return (
         <Grid>
             <Grid.Column width={10}>
-                <EventList events={events}  deleteEvent={handleDeleteEvent}/>
+                <EventList events={events}/>
             </Grid.Column>
             <Grid.Column width={6}>
                 

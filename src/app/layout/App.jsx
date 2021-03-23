@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { Route, useLocation } from 'react-router';
 import { Container } from 'semantic-ui-react';
 import EventDashboard from '../../features/events/eventDashboard/EventDashboard';
 import EventDetailedPage from '../../features/events/eventDetailed/EventDetailedPage';
@@ -11,6 +11,8 @@ import Sandbox from '../../features/sandbox/Sandbox';
 
 
 function App() {
+
+  const {key} = useLocation(); //pobieram props location key i przekazuję go do Route EventForm by każdy Form miał unikalny key
  
   return (
     <>
@@ -24,7 +26,7 @@ function App() {
               <Route exact path='/events' component={EventDashboard}/>
               <Route exact path='/sandbox' component={Sandbox}/>
               <Route path='/events/:id' component={EventDetailedPage}/>
-              <Route path={['/createEvent',`/manage/:id`]} component={EventForm}/>
+              <Route path={['/createEvent',`/manage/:id`]} component={EventForm} key={key}/>
             </Container>
           </>
         )}
