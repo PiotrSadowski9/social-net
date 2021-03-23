@@ -1,11 +1,11 @@
-import React,{useState} from 'react'
+import React from 'react'
+import { useSelector } from 'react-redux'
 import { Grid } from 'semantic-ui-react'
-import {sampleData} from '../../../app/api/sampleData'
 import EventList from './EventList'
 
 
 export default function EventDashboard() {
-    const [events, setEvents] = useState(sampleData);
+    const {events} = useSelector(state => state.event); //pobieram dane ze Stora
     
 
     // function handleCreateEvent(event) {
@@ -19,7 +19,7 @@ export default function EventDashboard() {
     // }
 
     function handleDeleteEvent(eventId){
-        setEvents(events.filter(evt => evt.id !== eventId));
+        // setEvents(events.filter(evt => evt.id !== eventId));
     }
 
     
