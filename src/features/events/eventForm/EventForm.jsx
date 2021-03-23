@@ -1,10 +1,16 @@
 import cuid from 'cuid';
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button, Form, Header, Segment} from 'semantic-ui-react'
+import { Button, Form, Header, Segment} from 'semantic-ui-react';
+import {createEvent, updateEvent} from '../eventActions'
 
-export default function EventForm({setFormOpen,setEvents,createEvent,selectedEvent,updateEvent}) {
-    const initialValues = selectedEvent ?? {
+export default function EventForm({match}) {
+    
+    const dispatch = useDispatch(); //dane ze stora
+    const selectedEvent = useSelector(state => state.event.events.find(e => e.id === match.params.id)) //wybieram konkretny event ze stora w oparciu o id eventu
+    
+    const initialValues = selectedEvent ?? { //ustawiam initialValues na pobrane dane ze Stora albo na pusty formularz
         title:'',
         category:'',
         description:'',
@@ -17,13 +23,13 @@ export default function EventForm({setFormOpen,setEvents,createEvent,selectedEve
     function handleFormSubmit() { //Tworzę nowy event z podanych wartości
 
         selectedEvent 
-        ? updateEvent({...selectedEvent,...values}) //zachowuję dotychczasowe dane i nadpisuję te zmienione
-        : createEvent({...values,
-                    id:cuid(),
+        ? dispatch(updateEvent({...selectedEvent,...values})) //zachowuję dotychczasowe dane i nadpisuję te zmienione
+        : dispatch(createEvent({...values,
+                    id:cuid(), //id z biblioteki cuid
                     hostedBy:'Bob',
                     attendees:[],
-                    hostPhotoURL:'/assets/user.png'});
-        setFormOpen(false)
+                    hostPhotoURL:'/assets/user.png'}));
+       
     }
     function handleInputChange(e){
         const {name,value} = e.target;
