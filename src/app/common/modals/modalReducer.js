@@ -9,3 +9,26 @@ export function openModal(payload) {  //action creator
         payload
     }
 }
+
+export function closeModal() {  //action creator
+    return {
+        type: CLOSE_MODAL,     
+    }
+}
+
+
+const initialState = null;
+
+//reducer funtion
+export default function modalReducer(state = initialState,{type, payload}){
+    switch (type) {
+        case OPEN_MODAL:
+            const {modalType, modalProps} = payload;
+            return {modalType, modalProps}  //pobieramy modalType i modalProps z payload i przekazujemy do compomentu modal
+        case CLOSE_MODAL:
+            return null;  
+        default:
+            return state;      
+
+    }
+}
