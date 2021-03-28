@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, useLocation } from 'react-router';
+import { ToastContainer } from 'react-toastify';
 import { Container } from 'semantic-ui-react';
 import EventDashboard from '../../features/events/eventDashboard/EventDashboard';
 import EventDetailedPage from '../../features/events/eventDetailed/EventDetailedPage';
@@ -18,6 +19,7 @@ function App() {
   return (
     <>
       <ModalManager/>
+      <ToastContainer position='bottom-right' hideProgressBar/>
       <Route exact path='/' component={HomePage}/>
       <Route 
         path={'/(.+)'} //wszystko co ma slash plus coś
