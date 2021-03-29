@@ -1,9 +1,9 @@
 import { sampleData } from "../../app/api/sampleData";
-import { DELETE_EVENT, UPDATE_EVENT, CREATE_EVENT } from "./eventConstants";
+import { DELETE_EVENT, UPDATE_EVENT, CREATE_EVENT, FETCH_EVENT } from "./eventConstants";
 
 
 const initialState = {
-    events:sampleData
+    events:[],
 }
 
 export default function eventReducer(state = initialState, {type, payload}){
@@ -23,6 +23,11 @@ export default function eventReducer(state = initialState, {type, payload}){
                 ...state,
                 events:  [...state.events.filter(evt => evt.id !== payload)] // filtruję tablice i usuwam event
             };
+        case FETCH_EVENT:
+            return {
+                ...state,
+                events: payload
+            }    
         default:
             return state;
     }

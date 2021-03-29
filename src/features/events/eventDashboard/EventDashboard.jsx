@@ -1,12 +1,16 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Grid } from 'semantic-ui-react'
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 import EventList from './EventList'
 
 
 export default function EventDashboard() {
     const {events} = useSelector(state => state.event); //pobieram dane ze Stora
-    
+    const {loading} = useSelector(state => state.async);
+
+
+    if (loading) return <LoadingComponent/>
 
     
     return (
