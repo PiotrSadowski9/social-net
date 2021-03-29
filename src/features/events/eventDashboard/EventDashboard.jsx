@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { Grid } from 'semantic-ui-react'
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import EventList from './EventList'
+import EventListItemPlaceholder from './EventListItemPlaceholder';
 
 
 export default function EventDashboard() {
@@ -10,12 +11,17 @@ export default function EventDashboard() {
     const {loading} = useSelector(state => state.async);
 
 
-    if (loading) return <LoadingComponent/>
-
+   
     
     return (
         <Grid>
             <Grid.Column width={10}>
+            {loading &&
+                <>
+                    <EventListItemPlaceholder/>
+                    <EventListItemPlaceholder/>
+                </>
+            }
                 <EventList events={events}/>
             </Grid.Column>
             <Grid.Column width={6}>
