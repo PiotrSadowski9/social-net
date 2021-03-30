@@ -1,7 +1,8 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Grid } from 'semantic-ui-react'
-import { dataFromSnapshot, getEventsFromFirestore } from '../../../app/firestore/firestoreService';
+import { listenToEventsFromFirestore } from '../../../app/firestore/firestoreService';
+import useFirestoreCollection from '../../../app/hooks/useFirestoreCollection';
 import { listenToEvents } from '../eventActions';
 import EventFilters from './EventFilters';
 // import LoadingComponent from '../../../app/layout/LoadingComponent';
@@ -14,15 +15,12 @@ export default function EventDashboard() {
     const {events} = useSelector(state => state.event); //pobieram dane ze Stora
     const {loading} = useSelector(state => state.async);
 
-    useEffect(() => {
-        const unsubscribe = getEventsFromFirestore({ //Listening danych z firestora
-            next: snapshot => dispatch(listenToEvents(snapshot.docs.map(docSnapshot => dataFromSnapshot(docSnapshot)))), // otrzymywanie danych z firestore
-            error: error => console.log(error)
-        })
-        return unsubscribe
-    },[dispatch]) //uruchamiamy tylko jeśli dispatch jest na liście zmian. Powinien być tylko raz przy uruchamianiu
-   
-    
+    useFirestoreCollection({
+       query: () => listenToEventsFromFirestore(),
+       data: events => dispatch(listenToEvents(events)),
+       deps: [dispatch] 
+    })
+
     return (
         <Grid>
             <Grid.Column width={10}>
