@@ -26,3 +26,8 @@ export function listenToEventsFromFirestore() {
     return db.collection('events') //Sprawdzam czy działa
 }
 
+
+
+export function listenToEventFromFirestore(eventId) { // pozwala zapytać o individual event a nie collection
+    return db.collection('events').doc(eventId)
+}
