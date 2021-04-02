@@ -9,12 +9,13 @@ import useFirestoreDoc from '../../../app/hooks/useFirestoreDoc'
 import { listenToEventFromFirestore } from '../../../app/firestore/firestoreService'
 import { listenToEvents } from '../eventActions';
 import LoadingComponent from '../../../app/layout/LoadingComponent'
+import { Redirect } from 'react-router'
 
 export default function EventDetailedPage({match}) { 
     const dispatch = useDispatch();
     const event = useSelector(state => state.event.events.find(e => e.id === match.params.id)) //wybieram konkretny event ze stora w oparciu o id eventu
     
-    const {loading} = useSelector(state => state.async);
+    const {loading, error} = useSelector(state => state.async);
 
     useFirestoreDoc({ // próba pobrania eventu ze stora, to jest useEffect
         query: () => listenToEventFromFirestore(match.params.id),
@@ -22,7 +23,9 @@ export default function EventDetailedPage({match}) {
         deps: [match.params.id, dispatch] //Jesli zmienimy Id, wywolujemy ponownie funkcję
     });
 
-    if (loading || !event) return <LoadingComponent content='Loading event...'/>
+    if (loading || (!event && !error)) return <LoadingComponent content='Loading event...'/>
+
+    if (error) return <Redirect to='/error'/>
 
     return (
         

@@ -11,7 +11,7 @@ export default function useFirestoreDoc({query, data, deps}) {
         const unsubscribe = query().onSnapshot(
             snapshot => {
                 if (!snapshot.exist) { // Jeśli nie istnieje wyszukiwane id, fire storm zwraca obiekt z kluczem exist false
-                    dispatch.name(asyncActionError({code: 'not-found', message:'Could not find document'}));
+                    dispatch(asyncActionError({code: 'not-found', message:'Could not find document'}));
                     return
                 }
                 data(dataFromSnapshot(snapshot));
