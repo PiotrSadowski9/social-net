@@ -2,21 +2,27 @@ import cuid from 'cuid';
 import { Formik, Form } from 'formik';
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Button, Header, Segment} from 'semantic-ui-react';
-import {createEvent, updateEvent} from '../eventActions';
+import {createEvent, listenToEvents, updateEvent} from '../eventActions';
 import * as Yup from 'yup';
 import MyTextInput from '../../../app/common/form/MyTextInput';
 import MyTextArea from '../../../app/common/form/MyTextArea';
 import MySelectInput from '../../../app/common/form/MySelectInput';
 import { categoryData } from '../../../app/api/categoryOptions';
 import MyDateInput from '../../../app/common/form/MydateInput';
+import { addEventToFirestore, listenToEventFromFirestore, updateEventInFirestore } from '../../../app/firestore/firestoreService';
+import useFirestoreDoc from '../../../app/hooks/useFirestoreDoc';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
+import { toast } from 'react-toastify';
 
 export default function EventForm({match,history}) {
     
     const dispatch = useDispatch(); //dane ze stora
     const selectedEvent = useSelector(state => state.event.events.find(e => e.id === match.params.id)) //wybieram konkretny event ze stora w oparciu o id eventu
     
+    const {loading, error} = useSelector((state) => state.async)
+
     const initialValues = selectedEvent ?? { //ustawiam initialValues na pobrane dane ze Stora albo na pusty formularz
         title:'',
         category:'',
@@ -33,7 +39,18 @@ export default function EventForm({match,history}) {
         city: Yup.string().required(),
         venue: Yup.string().required(),
         date: Yup.string().required(),
-    })
+    });
+
+    useFirestoreDoc({ // próba pobrania eventu ze stora, to jest useEffect
+        query: () => listenToEventFromFirestore(match.params.id),
+        data: event => dispatch(listenToEvents([event])),
+        deps: [match.params.id, dispatch] //Jesli zmienimy Id, wywolujemy ponownie funkcję
+    });
+
+
+    if (loading || (!selectedEvent && !error)) return <LoadingComponent content='Loading event...'/>;
+
+    if (error) return <Redirect to='/error'/>
   
 
 
@@ -43,15 +60,18 @@ export default function EventForm({match,history}) {
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
-                onSubmit={values => {
-                    selectedEvent 
-                    ? dispatch(updateEvent({...selectedEvent,...values})) //zachowuję dotychczasowe dane i nadpisuję te zmienione
-                    : dispatch(createEvent({...values,
-                    id:cuid(), //id z biblioteki cuid
-                    hostedBy:'Bob',
-                    attendees:[],
-                    hostPhotoURL:'/assets/user.png'}));
-                history.push('/events') // po utworzeniu eventu przenosi na strone z eventami
+                onSubmit={async (values, {setSubmitting}) => {
+                    try {
+                        selectedEvent 
+                            ? await updateEventInFirestore(values) //uddateujemy event w Firestore
+                            : await addEventToFirestore(values);    // dodajemy event do Firestora
+                        setSubmitting(false)
+                    history.push('/events') // po utworzeniu eventu przenosi na strone z eventami
+                    } catch (error) {
+                        toast.error(error.message);
+                        setSubmitting(false);
+                    }
+                  
                 }}
             >
                 {({isSubmitting, dirty, isValid}) => (

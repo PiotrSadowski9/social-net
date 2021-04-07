@@ -17,16 +17,17 @@ export default function EventDetailedPage({match}) {
     
     const {loading, error} = useSelector(state => state.async);
 
+
     useFirestoreDoc({ // próba pobrania eventu ze stora, to jest useEffect
         query: () => listenToEventFromFirestore(match.params.id),
         data: event => dispatch(listenToEvents([event])),
         deps: [match.params.id, dispatch] //Jesli zmienimy Id, wywolujemy ponownie funkcję
     });
 
-    if (loading || (!event && !error)) return <LoadingComponent content='Loading event...'/>
+    if (loading || (!event && !error)) return <LoadingComponent content='Loading event...'/>;
 
     if (error) return <Redirect to='/error'/>
-
+    
     return (
         
            <Grid>
