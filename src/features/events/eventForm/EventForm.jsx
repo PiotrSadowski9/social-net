@@ -42,13 +42,14 @@ export default function EventForm({match,history}) {
     });
 
     useFirestoreDoc({ // próba pobrania eventu ze stora, to jest useEffect
+        shouldExecute: !!match.params.id,
         query: () => listenToEventFromFirestore(match.params.id),
-        data: event => dispatch(listenToEvents([event])),
+        data: (event) => dispatch(listenToEvents([event])),
         deps: [match.params.id, dispatch] //Jesli zmienimy Id, wywolujemy ponownie funkcję
     });
 
 
-    if (loading || (!selectedEvent && !error)) return <LoadingComponent content='Loading event...'/>;
+    if (loading) return <LoadingComponent content='Loading event...'/>;
 
     if (error) return <Redirect to='/error'/>
   

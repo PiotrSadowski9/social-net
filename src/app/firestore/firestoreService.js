@@ -24,7 +24,7 @@ export function dataFromSnapshot(snapshot) {
 }
 
 export function listenToEventsFromFirestore() {
-    return db.collection('events') //Sprawdzam czy działa
+    return db.collection('events').orderBy('date') //Sprawdzam czy działa
 }
 
 
