@@ -24,7 +24,7 @@ export function dataFromSnapshot(snapshot) {
 }
 
 export function listenToEventsFromFirestore() {
-    return db.collection('events').orderBy('date') //Sprawdzam czy działa
+    return db.collection('events').orderBy('date') //Sprawdzam czy działa, segreguję po dacie
 }
 
 
@@ -48,4 +48,8 @@ export function addEventToFirestore(event) {  //funckcja dodawania do Firestora 
 
 export function updateEventInFirestore(event) {
     return db.collection('events').doc(event.id).update(event)
+}
+
+export function deleteEventInFirestore(eventId) {
+    return db.collection('events').doc(eventId).delete();
 }
