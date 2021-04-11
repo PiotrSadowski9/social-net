@@ -11,7 +11,7 @@ import MyTextArea from '../../../app/common/form/MyTextArea';
 import MySelectInput from '../../../app/common/form/MySelectInput';
 import { categoryData } from '../../../app/api/categoryOptions';
 import MyDateInput from '../../../app/common/form/MydateInput';
-import { addEventToFirestore, listenToEventFromFirestore, updateEventInFirestore } from '../../../app/firestore/firestoreService';
+import { addEventToFirestore, cancelEventToggle, listenToEventFromFirestore, updateEventInFirestore } from '../../../app/firestore/firestoreService';
 import useFirestoreDoc from '../../../app/hooks/useFirestoreDoc';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { toast } from 'react-toastify';
@@ -92,7 +92,16 @@ export default function EventForm({match,history}) {
                         timeCaption='time'
                         dateFormat='MMMM d, yyyy h:mm a'
                         />
-
+                     {selectedEvent &&
+                        <Button 
+                        type='button' 
+                        floated='left' 
+                        color= {selectedEvent.isCancelled ? 'green' : 'red'}
+                        content={selectedEvent.isCancelled ? 'Reactive event' : 'Cancel Event'}
+                        onClick={() => cancelEventToggle(selectedEvent)}
+                        />
+                     }   
+                    
                     <Button 
                         loading={isSubmitting}
                         disabled={!isValid || !dirty || isSubmitting} 
@@ -100,6 +109,7 @@ export default function EventForm({match,history}) {
                         floated='right' 
                         positive 
                         content='Submit'/>
+
                     <Button
                         disabled={isSubmitting} 
                         as={Link} 
