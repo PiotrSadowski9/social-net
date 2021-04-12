@@ -1,9 +1,9 @@
 
 import { Formik, Form } from 'formik';
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import { Button, Header, Segment} from 'semantic-ui-react';
+import { Button, Confirm, Header, Segment} from 'semantic-ui-react';
 import { listenToEvents} from '../eventActions';
 import * as Yup from 'yup';
 import MyTextInput from '../../../app/common/form/MyTextInput';
@@ -19,6 +19,8 @@ import { toast } from 'react-toastify';
 export default function EventForm({match,history}) {
     
     const dispatch = useDispatch(); //dane ze stora
+    const [loadingCancel, setLoadingCancel] = useState(false);//Confirm button
+    const [confirmOpen, setconfirmOpen] = useState(false)//confirm button
     const selectedEvent = useSelector(state => state.event.events.find(e => e.id === match.params.id)) //wybieram konkretny event ze stora w oparciu o id eventu
     
     const {loading, error} = useSelector((state) => state.async)
@@ -40,6 +42,18 @@ export default function EventForm({match,history}) {
         venue: Yup.string().required(),
         date: Yup.string().required(),
     });
+
+    async function handleConacelToggle(event) {
+        setconfirmOpen(false);
+        setLoadingCancel(true);
+        try {
+            await cancelEventToggle(event);
+            setLoadingCancel(false)
+        } catch (error) {
+            setLoadingCancel(true);
+            toast.error(error.message)
+        }
+    }
 
     useFirestoreDoc({ // próba pobrania eventu ze stora, to jest useEffect
         shouldExecute: !!match.params.id,
@@ -76,7 +90,7 @@ export default function EventForm({match,history}) {
                 }}
             >
                 {({isSubmitting, dirty, isValid}) => (
-                    <Form className='ui form'>
+                <Form className='ui form'>
                     <Header sub color='teal' content='Event Details'/>
                     <MyTextInput name='title' placeholder='Event title'/>
                     <MySelectInput name='category' placeholder='Event category' options={categoryData}/>
@@ -94,11 +108,12 @@ export default function EventForm({match,history}) {
                         />
                      {selectedEvent &&
                         <Button 
+                        loading={loadingCancel}
                         type='button' 
                         floated='left' 
                         color= {selectedEvent.isCancelled ? 'green' : 'red'}
                         content={selectedEvent.isCancelled ? 'Reactive event' : 'Cancel Event'}
-                        onClick={() => cancelEventToggle(selectedEvent)}
+                        onClick={() => setconfirmOpen(true)}
                         />
                      }   
                     
@@ -124,7 +139,13 @@ export default function EventForm({match,history}) {
             
             
             </Formik>
-            
+            <Confirm
+                content={selectedEvent?.isCancelled ? 'This will reactivate the event - are you sure?' :
+                 'This will cancel the event - are yuo sure?'}
+                 open={confirmOpen}
+                 onCancel={()=> setconfirmOpen(false)}
+                 onConfirm={()=> handleConacelToggle(selectedEvent)}
+            />
         </Segment>
     )
 }
