@@ -7,6 +7,7 @@ import { Button } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
 import { signInUser } from './authActions';
 import { closeModal } from '../../app/common/modals/modalReducer';
+import { signInWithEmail } from '../../app/firestore/firebaseService';
 
 export default function LoginForm() {
     const dispatch = useDispatch();
@@ -18,10 +19,15 @@ export default function LoginForm() {
                 email: Yup.string().required().email(),
                 password: Yup.string().required()
             })}
-            onSubmit = {(values,{setSubmitting} )=> {
-                dispatch(signInUser(values));// przesyłam wartosci do Stora redux
-                setSubmitting(false); 
-                dispatch(closeModal());//przesyłam do Stora, wykonuje reducera CloseModal i zamykam modal logowania
+            onSubmit = {async (values,{setSubmitting} )=> {
+                try {
+                    await signInWithEmail(values);// przesyłam wartosci do Stora redux
+                          setSubmitting(false); 
+                          dispatch(closeModal());//przesyłam do Stora, wykonuje reducera CloseModal i zamykam modal logowania
+                } catch (error) {
+                    setSubmitting(false);
+                    console.log(error)
+                }
             }}
             >
             {({isSubmitting, isValid, dirty}) => (
