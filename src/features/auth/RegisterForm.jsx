@@ -3,10 +3,10 @@ import React from 'react';
 import ModalWrapper from '../../app/common/modals/ModalWrapper';
 import * as Yup from 'yup';
 import MyTextInput from '../../app/common/form/MyTextInput';
-import { Button } from 'semantic-ui-react';
+import { Button, Label } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
 import { closeModal } from '../../app/common/modals/modalReducer';
-import { registerInFirebase, signInWithEmail } from '../../app/firestore/firebaseService';
+import { registerInFirebase} from '../../app/firestore/firebaseService';
 
 export default function RegisterForm() {
     const dispatch = useDispatch();
@@ -19,22 +19,24 @@ export default function RegisterForm() {
                 email: Yup.string().required().email(),
                 password: Yup.string().required()
             })}
-            onSubmit = {async (values,{setSubmitting} )=> {
+            onSubmit = {async (values,{setSubmitting, setErrors} )=> {
                 try {
                     await registerInFirebase(values);// przesyłam wartosci do firebase
                           setSubmitting(false); 
                           dispatch(closeModal());//przesyłam do Stora, wykonuje reducera CloseModal i zamykam modal logowania
                 } catch (error) {
+                    setErrors({auth: 'Problem with username or password'})
                     setSubmitting(false);
-                    console.log(error)
+                    
                 }
             }}
             >
-            {({isSubmitting, isValid, dirty}) => (
+            {({isSubmitting, isValid, dirty, errors}) => (
                 <Form className='ui form'>
                    <MyTextInput name='displayName' placeholder='DisplayName'/>
                    <MyTextInput name='email' placeholder='Email Address'/>
                    <MyTextInput name='password' placeholder='Password' type='password'/>
+                   {errors.auth && <Label basic color='red' style={{marginBottom:10}} content={errors.auth} />}
                    <Button
                        loading={isSubmitting}
                        disabled={!isValid || !dirty || isSubmitting}
