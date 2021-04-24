@@ -64,6 +64,7 @@ export function setUserProfileData(user) {//dodajÄ™ do database w firebase  nowÄ
     return db.collection('users').doc(user.uid).set({ 
         displayName: user.displayName,
         email: user.email,
+        photoURL: user.photoURL || null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
     })
 }
