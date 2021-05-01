@@ -1,15 +1,19 @@
 import { Form, Formik } from 'formik'
 import React from 'react'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Button, Header, Label, Segment } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import MyTextInput from '../../app/common/form/MyTextInput'
 
 export default function AccountPage() {
+    const {currentUser} = useSelector((state) => state.auth)
+    console.log(currentUser.providerId)
     return (
         <Segment>
             <Header divideing size='large' content='Account'/>
-            <div>
+            {currentUser.providerId === 'password' && 
+            <>
                 <Header color='teal' sub content= 'Change Password'/>
                 <p>Use this form to change your password</p>
                 <Formik
@@ -33,17 +37,20 @@ export default function AccountPage() {
                 )}
                 
                 </Formik>
-            </div>
-            <div>
+            </>
+            }
+            {currentUser.providerId === 'facebook.com' &&
+            <>
                 <Header color='teal' sub content='Facebook account'/>
                 <p>Please visit Facebook to update your account </p>
                 <Button icon='facebook' color='facebook' as={Link} to='https://facebook.com' content='Go to Facebook'/>
-            </div>
-            <div>
+            </>}
+            {currentUser.providerId === 'google.com' &&
+            <>
                 <Header color='teal' sub content='Google account'/>
                 <p>Please visit Google to update your account </p>
                 <Button icon='google' color='google plus' as={Link} to='https://google.com' content='Go to Google'/>
-            </div>
+            </>}
         </Segment>
     )
 }
