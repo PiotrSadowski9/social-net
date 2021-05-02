@@ -14,8 +14,9 @@ export default function SignedInMenu() {
 
     async function handleSignOut() {
         try {
-            await signOutFirebase();
             history.push('/');// kiedy nie ma Routa
+            await signOutFirebase();
+           
         } catch (error) {
             toast.error(error.message)
         }
