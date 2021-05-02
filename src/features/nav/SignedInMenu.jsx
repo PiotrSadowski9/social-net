@@ -9,6 +9,7 @@ import { signOutFirebase } from '../../app/firestore/firebaseService';
 export default function SignedInMenu() {
 
     const {currentUser} = useSelector(state => state.auth)
+    console.log(currentUser)
     const history = useHistory(); //daje dostęp do ścieżki dosßepu kiedy nie ma Route'a
 
     async function handleSignOut() {

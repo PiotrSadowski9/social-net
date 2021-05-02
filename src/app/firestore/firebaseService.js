@@ -43,3 +43,8 @@ export async function socialLogin(selectedProvider) { // Logowanie się przez fa
         toast.error(error.message);
     }
 }
+
+export function updateUserPassword(creds) {
+    const user = firebase.auth().currentUser; //pobieram usera z firebase
+    return user.updatePassword(creds.newPassword1); //przypisuję nowe hasło do usera
+}
