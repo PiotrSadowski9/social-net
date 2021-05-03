@@ -7,9 +7,10 @@ import * as Yup from 'yup'
 import MyTextInput from '../../app/common/form/MyTextInput'
 import { updateUserPassword } from '../../app/firestore/firebaseService'
 
+
 export default function AccountPage() {
     const {currentUser} = useSelector((state) => state.auth)
-    console.log(currentUser.providerId)
+ 
     return (
         <Segment>
             <Header divideing size='large' content='Account'/>
@@ -67,6 +68,7 @@ export default function AccountPage() {
                 <p>Please visit Google to update your account </p>
                 <Button icon='google' color='google plus' as={Link} to='https://google.com' content='Go to Google'/>
             </>}
+        
         </Segment>
     )
 }
