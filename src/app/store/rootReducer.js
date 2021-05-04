@@ -4,6 +4,7 @@ import eventReducer from '../../features/events/eventReducer'
 import modalReducer from '../common/modals/modalReducer'
 import authReducer from '../../features/auth/authReducer'
 import asyncReducer from '../async/asyncReducer'
+import profileReducer from '../../features/profiles/profilePage/profileReducer'
 
 
 const rootReducer = combineReducers({  //zamieniam obiekt z dwiema wartościami reducerów na jeden reducer
@@ -11,7 +12,8 @@ const rootReducer = combineReducers({  //zamieniam obiekt z dwiema wartościami 
     event: eventReducer,
     modals:modalReducer,
     auth:authReducer,
-    async: asyncReducer
+    async: asyncReducer,
+    profile: profileReducer
 })
 
 export default rootReducer
