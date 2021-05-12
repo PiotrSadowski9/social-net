@@ -72,3 +72,20 @@ export function setUserProfileData(user) {//dodajÄ™ do database w firebase  nowÄ
 export function getUserProfile(userId) {
     return db.collection('users').doc(userId);
 }
+
+//updatowanie profilu usera w firestore
+
+export async function updateUserProfile(profile) {
+    const user = firebase.auth().currentUser;
+    try {
+        if (user.displayName !== profile.displayName) {
+            await user.updateProfile({
+                displayName: profile.displayName
+            })
+            
+        }
+        return await db.collection('users').doc(user.uid).update(profile);   
+    } catch (error) {
+        throw error
+    }
+}
