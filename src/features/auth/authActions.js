@@ -13,7 +13,7 @@ export function signInUser(user) {
     }
 }
 
-export function verifyAuth() { //spawdzam czy uzytkownik jest zlaogowany
+export function verifyAuth() { //spawdzam czy uzytkownik jest zloggowany
     return function (dispatch) {
         return firebase.auth().onAuthStateChanged(user => {
             if (user) {
