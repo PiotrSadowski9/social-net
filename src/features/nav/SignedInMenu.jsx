@@ -10,6 +10,10 @@ export default function SignedInMenu() {
 
     const {currentUserProfile} = useSelector(state => state.profile)
    
+   
+   
+    
+   
     const history = useHistory(); //daje dostęp do ścieżki dosßepu kiedy nie ma Route'a
 
     async function handleSignOut() {
@@ -21,10 +25,11 @@ export default function SignedInMenu() {
             toast.error(error.message)
         }
     }
+    
 
     return (
         <Menu.Item position='right'>
-                   <Image avatar spaced='right' src={currentUserProfile.photoURL || '/assets/user.png'}/>
+                   <Image avatar spaced='right' src={currentUserProfile.photoURL ||'/assets/user.png'}/>
                    <Dropdown pointing='top left' text={currentUserProfile.displayName}>
                        <Dropdown.Menu>
                            <Dropdown.Item as={Link} to='/createEvent' text='Create new Event' icon='plus'/>

@@ -5,7 +5,7 @@ import ProfileContent from './ProfileContent'
 import ProfileHeader from './ProfileHeader'
 import useFirestoreDoc from '../../../app/hooks/useFirestoreDoc'
 import { getUserProfile } from '../../../app/firestore/firestoreService'
-import { listenToSelectedUserProfile } from './profileActions'
+import { listenToSelectedUserProfile } from '../profileActions'
 import LoadingComponent from '../../../app/layout/LoadingComponent'
 
 
@@ -13,7 +13,9 @@ export default function ProfilePage({match}) {
 
     const dispatch = useDispatch();
     const {selectedUserProfile} = useSelector((state) => state.profile);
+    
     const {currentUser} = useSelector((state)=> state.auth);
+    
     const {loading, error} = useSelector((state) => state.async);
 
     useFirestoreDoc({
