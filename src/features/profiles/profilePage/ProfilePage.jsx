@@ -14,6 +14,7 @@ export default function ProfilePage({match}) {
     const dispatch = useDispatch();
     const {selectedUserProfile} = useSelector((state) => state.profile);
     
+    
     const {currentUser} = useSelector((state)=> state.auth);
     
     const {loading, error} = useSelector((state) => state.async);
