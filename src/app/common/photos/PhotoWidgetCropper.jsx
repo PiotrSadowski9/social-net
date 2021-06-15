@@ -21,10 +21,11 @@ export default function PhotoWidgetCropper({setImage, imagePreview}) {
 
   return (
     <Cropper
+      ref={cropper}
       src={imagePreview}
       style={{ height: 200, width: "100%" }}
       // Cropper.js options
-      initialAspectRatio={1}
+      aspectRatio={1}
       preview = '.img-preview'
       guides={false}
       viewMode={1}
@@ -33,7 +34,7 @@ export default function PhotoWidgetCropper({setImage, imagePreview}) {
       cropBoxMovable={true}
       cropBoxResizable={true}
       crop={cropImage}
-      ref={cropper}
+      
     />
   );
 };
