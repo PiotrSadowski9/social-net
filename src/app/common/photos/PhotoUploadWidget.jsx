@@ -26,7 +26,7 @@ export default function PhotoUploadWidget() {
                 <Header color='teal' sub content='Step 3 - Preview & Upload'/>
                 {files.length > 0 &&
                     <>
-                        <div className='img-preview' style={{minHeigth: 200, minWidth:200, overflow:'hidden'}}/>
+                        <div className='img-preview' style={{minHeight: 200, minWidth:200, overflow:'hidden'}}/>
                         <Button.Group>
                             <Button style={{width:100}} positive icon='check'/>
                             <Button style={{width:100}} icon='close'/>

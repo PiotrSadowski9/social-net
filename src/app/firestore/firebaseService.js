@@ -48,3 +48,9 @@ export function updateUserPassword(creds) {
     const user = firebase.auth().currentUser; //pobieram usera z firebase
     return user.updatePassword(creds.newPassword1); //przypisuję nowe hasło do usera
 }
+
+export function uploadtoFirebaseStorage(file, filename) {
+    const user = firebase.auth().currentUser;
+    const storageRef = firebase.storage().ref();
+    return storageRef.child(`${user.uid}/user_images/${filename}`).put(file);
+}
