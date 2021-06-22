@@ -16,10 +16,10 @@ export function dataFromSnapshot(snapshot) {
             }
         }
     }
-    
+
     return {
         ...data,
-        id:snapshot.id
+        id: snapshot.id
     }
 }
 
@@ -61,7 +61,7 @@ export function cancelEventToggle(event) {
 }
 
 export function setUserProfileData(user) {//dodaję do database w firebase  nową collection 'user'
-    return db.collection('users').doc(user.uid).set({ 
+    return db.collection('users').doc(user.uid).set({
         displayName: user.displayName,
         email: user.email,
         photoURL: user.photoURL || null,
@@ -82,9 +82,9 @@ export async function updateUserProfile(profile) {
             await user.updateProfile({
                 displayName: profile.displayName
             })
-            
+
         }
-        return await db.collection('users').doc(user.uid).update(profile);   
+        return await db.collection('users').doc(user.uid).update(profile);
     } catch (error) {
         throw error
     }
@@ -97,7 +97,7 @@ export async function updateUserProfilePhoto(downloadURL, filename) {
         const userDoc = await userDocRef.get();
         if (!userDoc.data().photoURL) {
             await db.collection('users').doc(user.uid).update({
-                photoURL:downloadURL
+                photoURL: downloadURL
             });
             await user.updateProfile({
                 photoURL: downloadURL
@@ -114,4 +114,18 @@ export async function updateUserProfilePhoto(downloadURL, filename) {
 
 export function getUserPhotos(userUid) {
     return db.collection('users').doc(userUid).collection('photos');
+}
+
+export async function setMainPhoto(photo) {
+    const user = firebase.auth().currentUser;
+    try {
+        await db.collection('users').doc(user.uid).update({
+            photoURL: photo.url
+        })
+        return await user.updateProfile({
+            photoURL: photo.url
+        })
+    } catch (error) {
+        throw error;
+    }
 }
