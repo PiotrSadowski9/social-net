@@ -34,15 +34,18 @@ export function listenToEventFromFirestore(eventId) { // pozwala zapytać o indi
 }
 
 export function addEventToFirestore(event) {  //funckcja dodawania do Firestora zwraca Promise
+    const user = firebase.auth().currentUser;
     return db.collection('events').add({
         ...event,
-        hostedBy: 'Diana',
-        hostPhotoURL: 'https://randomuser.me/api/portraits/women/20.jpg',
+        hostUid: user.uid,
+        hostedBy: user.displayName,
+        hostPhotoURL: user.photoURL || null,
         attendees: firebase.firestore.FieldValue.arrayUnion({
-            id: cuid(),
-            displayName: 'Diana',
-            photoURL: 'https://randomuser.me/api/portraits/women/20.jpg'
-        }) //coś jak array.push 
+            id: user.uid,
+            displayName: user.displayName,
+            photoURL: user.photoURL || null
+        }), //coś jak array.push
+        attendeeIds: firebase.firestore.FieldValue.arrayUnion(user.uid) 
     })
 }
 
