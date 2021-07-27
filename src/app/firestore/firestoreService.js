@@ -137,3 +137,15 @@ export function deletePhotoFromCollection(photoId) {
     const userUid = firebase.auth().currentUser.uid;
     return db.collection('users').doc(userUid).collection('photos').doc(photoId).delete();
 }
+
+export function addUserAttendance(event) {
+    const user = firebase.auth().currentUser;
+    return db.collection('events').doc(event.id).update({
+        attendees: firebase.firestore.FieldValue.arrayUnion({
+            id: user.uid,
+            displayName: user.displayName,
+            photoURL: user.photoURL || null
+        }), //coś jak array.push
+        attendeeIds: firebase.firestore.FieldValue.arrayUnion(user.uid) 
+    })
+}
