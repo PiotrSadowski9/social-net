@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Grid } from 'semantic-ui-react'
 import { listenToEventsFromFirestore } from '../../../app/firestore/firestoreService';
@@ -14,6 +14,16 @@ export default function EventDashboard() {
     const dispatch = useDispatch();
     const {events} = useSelector(state => state.event); //pobieram dane ze Stora
     const {loading} = useSelector(state => state.async);
+    const [predicate, setPredicate] = useState(
+        new Map([
+            ['startDate', new Date()],
+            ['filter', 'all'],
+        ])
+    );
+
+    function handleSetPredicate(key, value) {
+        setPredicate(new Map(predicate.set(key, value)))
+    }
 
     useFirestoreCollection({
        query: () => listenToEventsFromFirestore(),
@@ -34,7 +44,7 @@ export default function EventDashboard() {
             </Grid.Column>
             <Grid.Column width={6}>
                 
-                <EventFilters/>
+                <EventFilters predicate={predicate} setPredicate={handleSetPredicate} loading={loading}/>
             </Grid.Column>
         </Grid>
     )
