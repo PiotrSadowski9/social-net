@@ -197,6 +197,7 @@ export function getUserEventsQuery(activeTab, userUid) {
         default: 
             return eventsRef
             .where('attendeeIds', 'array-contains', userUid)
+            .where('date', '>=', today)
             .orderBy('date')
     }
 }
