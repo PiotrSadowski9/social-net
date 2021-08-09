@@ -11,7 +11,8 @@ const firebaseConfig = {
     projectId: "revents7",
     storageBucket: "revents7.appspot.com",
     messagingSenderId: "365111837222",
-    appId: "1:365111837222:web:ec5a20a0a7112c63f3dce7"
+    appId: "1:365111837222:web:ec5a20a0a7112c63f3dce7",
+    databaseURL: "https://revents7-default-rtdb.europe-west1.firebasedatabase.app" //problemy z firebase real time
 }
 
 firebase.initializeApp(firebaseConfig);
