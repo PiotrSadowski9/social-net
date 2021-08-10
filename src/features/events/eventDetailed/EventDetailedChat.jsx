@@ -6,6 +6,7 @@ import { firebaseObjectToArray, getEventChatRef } from '../../../app/firestore/f
 import { listenToEventChat } from '../eventActions';
 import EventDetailedChatForm from './EventDetailedChatForm';
 import { formatDistance } from 'date-fns';
+import { CLEAR_COMMENTS } from '../eventConstants';
 
 export default function EventDetailedChat({eventId}) {
 
@@ -16,7 +17,11 @@ export default function EventDetailedChat({eventId}) {
         getEventChatRef(eventId).on('value', snapshot => {
             if(!snapshot.exists()) return;
             dispatch(listenToEventChat(firebaseObjectToArray(snapshot.val()).reverse()))
-        })
+        });
+        return () => { 
+            dispatch({type: CLEAR_COMMENTS});//usuwam komentarze po działaniu useEffect
+            getEventChatRef().off()//wyłączam listenera dla eventchat
+        }
     }, [eventId, dispatch])
 
     return (
