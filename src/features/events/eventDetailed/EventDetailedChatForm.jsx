@@ -6,7 +6,7 @@ import * as Yup from 'yup'
 
 import {  Loader } from 'semantic-ui-react'
 
-export default function EventDetailedChatForm({eventId}) {
+export default function EventDetailedChatForm({eventId, parentId,closeForm}) {
     return (
         <Formik
             initialValues={{comment:''}}
@@ -15,12 +15,13 @@ export default function EventDetailedChatForm({eventId}) {
             })}
             onSubmit = {async (values, {setSubmitting, resetForm}) => {
                 try {
-                    await addEventChatComment(eventId, values.comment)
+                    await addEventChatComment(eventId, {...values, parentId})
                     resetForm();
                 } catch (error) {
                     toast.error(error.message);
                 } finally {
-                    setSubmitting(false)
+                    setSubmitting(false);
+                    closeForm({open: false, commentId: null})
                 }
             }}
         >
