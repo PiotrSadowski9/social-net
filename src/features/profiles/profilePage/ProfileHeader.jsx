@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { toast } from 'react-toastify';
 import { Button, Divider, Grid, Header, Item, Reveal, Segment, Statistic } from 'semantic-ui-react'
-import { followUser } from '../../../app/firestore/firestoreService';
+import { followUser, unfollowUser } from '../../../app/firestore/firestoreService';
 
 export default function ProfileHeader({profile, isCurrentUser}) {
     const [loading, setLoading] = useState(false);
@@ -11,6 +11,17 @@ export default function ProfileHeader({profile, isCurrentUser}) {
         setLoading(true);
         try {
             await followUser(profile)
+        } catch (error) {
+            toast.error(error.message)
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function handleUnfollowUser() {
+        setLoading(true);
+        try {
+            await unfollowUser(profile)
         } catch (error) {
             toast.error(error.message)
         } finally {
@@ -48,6 +59,7 @@ export default function ProfileHeader({profile, isCurrentUser}) {
                             </Reveal.Content>
                             
                         </Reveal>
+                        <Button onClick={handleUnfollowUser} loading={loading} basic fluid color='red' content='Unfollow'/>
                     </>}
                     
                 </Grid.Column>
