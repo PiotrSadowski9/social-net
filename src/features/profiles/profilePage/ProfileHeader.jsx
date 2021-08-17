@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { Button, Divider, Grid, Header, Item, Reveal, Segment, Statistic } from 'semantic-ui-react'
 import { followUser, getFollowingDoc, unfollowUser } from '../../../app/firestore/firestoreService';
 import { setFollowUser, setUnfollowUser } from '../profileActions';
+import { CLEAR_FOLLOWINGS } from '../profileConstants';
 import ProfileCard from './ProfileCard';
 
 export default function ProfileHeader({profile, isCurrentUser}) {
@@ -24,7 +25,10 @@ export default function ProfileHeader({profile, isCurrentUser}) {
                 toast.error(error.message);
             }
         }
-        fetchFollowingDoc().then(() => setLoading(false))
+        fetchFollowingDoc().then(() => setLoading(false));
+        return () => {
+            dispatch({type: CLEAR_FOLLOWINGS})
+        }
     }, [dispatch, profile.id, isCurrentUser])
 
 
@@ -33,7 +37,7 @@ export default function ProfileHeader({profile, isCurrentUser}) {
         setLoading(true);
         try {
             await followUser(profile);
-            dispatch(setFollowUser())
+            dispatch(setFollowUser());
         } catch (error) {
             toast.error(error.message)
         } finally {
@@ -45,7 +49,7 @@ export default function ProfileHeader({profile, isCurrentUser}) {
         setLoading(true);
         try {
             await unfollowUser(profile);
-            dispatch(setUnfollowUser())
+            dispatch(setUnfollowUser());
         } catch (error) {
             toast.error(error.message)
         } finally {

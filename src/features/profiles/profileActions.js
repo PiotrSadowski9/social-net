@@ -55,3 +55,4 @@ export function setUnfollowUser() {
         type: SET_UNFOLLOW_USER
     }
 }
+
