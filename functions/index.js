@@ -22,9 +22,9 @@ exports.addFollowing = functions.firestore
           uid: userDoc.id,
         });
         // eslint-disable-next-line no-undef
-        batch.update(db.collection("users").doc(profile.id), {
+        batch.update(db.collection("users").doc(context.params.profileId), {
           // eslint-disable-next-line no-undef
-          followerCount: firebase.firestore.FieldValue.increment(1),
+          followerCount: admin.firestore.FieldValue.increment(1),
         });
         return await batch.commit();
       } catch (error) {
@@ -40,7 +40,7 @@ exports.removeFollowing = functions.firestore
       batch.delete(db.collection("following").doc(context.params.profileId).collection("userFollowers").doc(context.params.userUid));
       batch.update(db.collection("users").doc(context.params.profileId), {
         // eslint-disable-next-line no-undef
-        followerCount: firebase.firestore.FieldValue.increment(-1),
+        followerCount: admin.firestore.FieldValue.increment(-1),
       });
       try {
         return await batch.commit();
