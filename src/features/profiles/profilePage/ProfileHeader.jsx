@@ -5,7 +5,7 @@ import { Button, Divider, Grid, Header, Item, Reveal, Segment, Statistic } from 
 import { followUser, getFollowingDoc, unfollowUser } from '../../../app/firestore/firestoreService';
 import { setFollowUser, setUnfollowUser } from '../profileActions';
 import { CLEAR_FOLLOWINGS } from '../profileConstants';
-import ProfileCard from './ProfileCard';
+
 
 export default function ProfileHeader({profile, isCurrentUser}) {
     const dispatch = useDispatch();

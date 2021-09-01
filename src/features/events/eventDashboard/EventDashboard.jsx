@@ -4,6 +4,7 @@ import { Grid } from 'semantic-ui-react'
 import { listenToEventsFromFirestore } from '../../../app/firestore/firestoreService';
 import useFirestoreCollection from '../../../app/hooks/useFirestoreCollection';
 import { listenToEvents } from '../eventActions';
+import EventsFeed from '../EventsFeed';
 import EventFilters from './EventFilters';
 // import LoadingComponent from '../../../app/layout/LoadingComponent';
 import EventList from './EventList'
@@ -14,6 +15,7 @@ export default function EventDashboard() {
     const dispatch = useDispatch();
     const {events} = useSelector(state => state.event); //pobieram dane ze Stora
     const {loading} = useSelector(state => state.async);
+    const {authenticated} = useSelector(state => state.auth);
     const [predicate, setPredicate] = useState(
         new Map([
             ['startDate', new Date()],
@@ -43,7 +45,7 @@ export default function EventDashboard() {
                 <EventList events={events}/>
             </Grid.Column>
             <Grid.Column width={6}>
-                
+                {authenticated && <EventsFeed/>}
                 <EventFilters predicate={predicate} setPredicate={handleSetPredicate} loading={loading}/>
             </Grid.Column>
         </Grid>

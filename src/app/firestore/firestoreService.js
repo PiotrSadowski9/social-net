@@ -225,6 +225,7 @@ export async function unfollowUser(profile) {
     const batch = db.batch();
     try {
         batch.delete(db.collection('following').doc(user.uid).collection('userFollowing').doc(profile.id));
+        console.log('próba')
         
         batch.update(db.collection('users').doc(user.uid),{
             followingCount: firebase.firestore.FieldValue.increment(-1)
