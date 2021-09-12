@@ -55,7 +55,7 @@ exports.eventUpdated = functions.firestore
     .onUpdate(async (snapshot, context) => {
       const before = snapshot.before.data();
       const after = snapshot.after.data();
-      if (before.attemdees.length < after.attendees.length) {
+      if (before.attendees.length < after.attendees.length) {
         // eslint-disable-next-line max-len
         const attendeeJoined = after.attendees.filter((item1) => !before.attendees.some((item2) =>
           item2.id === item1.id))[0];
@@ -64,13 +64,13 @@ exports.eventUpdated = functions.firestore
           const followerDocs = await db.collection("following").doc(attendeeJoined.id)
               .collection("userFollowers").get();
           followerDocs.forEach((doc) => {
-            admin.database().ref(`/posts/${doc.id}`).push(newPost)(attendeeJoined, "joined-event", context.params.eventId);
+            admin.database().ref(`/posts/${doc.id}`).push(newPost(attendeeJoined, "joined-event", context.params.eventId));
           });
         } catch (error) {
           return console.log(error);
         }
       }
-      if (before.attemdees.length > after.attendees.length) {
+      if (before.attendees.length > after.attendees.length) {
         // eslint-disable-next-line max-len
         const attendeeLeft = before.attendees.filter((item1) => !after.attendees.some((item2) =>
           item2.id === item1.id))[0];
@@ -79,12 +79,13 @@ exports.eventUpdated = functions.firestore
           const followerDocs = await db.collection("following").doc(attendeeLeft.id)
               .collection("userFollowers").get();
           followerDocs.forEach((doc) => {
-            admin.database().ref(`/posts/${doc.id}`).push(newPost)(attendeeLeft, "left-event", context.params.eventId);
+            admin.database().ref(`/posts/${doc.id}`).push(newPost(attendeeLeft, "left-event", context.params.eventId));
           });
         } catch (error) {
           return console.log(error);
         }
       }
+      return console.log("finished");
     });
 
 // eslint-disable-next-line require-jsdoc
