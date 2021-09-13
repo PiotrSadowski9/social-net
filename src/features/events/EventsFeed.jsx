@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Feed, Header, Segment } from 'semantic-ui-react';
 import { firebaseObjectToArray, getUserFeedRef } from '../../app/firestore/firebaseService';
 import { listenToFeed } from '../profiles/profileActions';
+import EventFeedItem from './eventDashboard/EventFeedItem';
 
 export default function EventsFeed() {
 
@@ -28,19 +29,15 @@ export default function EventsFeed() {
 
 
 
-    const image = '/assets/user.png';
-    const date = '3 days ago';
-    const summary = 'Diana joined an event';
+   
     return (
         <>
           <Header attached color='teal' icon ='newspaper' content='News feed'/>
           <Segment attached='bottom'>
             <Feed>
-                <Feed.Event image={image} date={date} summary={summary}/>
-                <Feed.Event image={image} date={date} summary={summary}/>
-                <Feed.Event image={image} date={date} summary={summary}/>
-                <Feed.Event image={image} date={date} summary={summary}/>
-                <Feed.Event image={image} date={date} summary={summary}/>
+                {feed.map(post => (
+                  <EventFeedItem post={post} key={post.id}/>
+                ))}
             </Feed>
           </Segment>  
         </>

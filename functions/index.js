@@ -64,7 +64,7 @@ exports.eventUpdated = functions.firestore
           const followerDocs = await db.collection("following").doc(attendeeJoined.id)
               .collection("userFollowers").get();
           followerDocs.forEach((doc) => {
-            admin.database().ref(`/posts/${doc.id}`).push(newPost(attendeeJoined, "joined-event", context.params.eventId));
+            admin.database().ref(`/posts/${doc.id}`).push(newPost(attendeeJoined, "joined-event", context.params.eventId, before));
           });
         } catch (error) {
           return console.log(error);
@@ -79,7 +79,7 @@ exports.eventUpdated = functions.firestore
           const followerDocs = await db.collection("following").doc(attendeeLeft.id)
               .collection("userFollowers").get();
           followerDocs.forEach((doc) => {
-            admin.database().ref(`/posts/${doc.id}`).push(newPost(attendeeLeft, "left-event", context.params.eventId));
+            admin.database().ref(`/posts/${doc.id}`).push(newPost(attendeeLeft, "left-event", context.params.eventId, before));
           });
         } catch (error) {
           return console.log(error);
@@ -89,7 +89,7 @@ exports.eventUpdated = functions.firestore
     });
 
 // eslint-disable-next-line require-jsdoc
-function newPost(user, code, eventId) {
+function newPost(user, code, eventId, event) {
   return {
     photoURL: user.photoURL || "/assets/user.png",
     date: admin.database.ServerValue.TIMESTAMP,
@@ -97,5 +97,6 @@ function newPost(user, code, eventId) {
     displayName: user.displayName,
     eventId,
     userUid: user.id,
+    title: event.title,
   };
 }
