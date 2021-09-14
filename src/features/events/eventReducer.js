@@ -28,7 +28,7 @@ export default function eventReducer(state = initialState, {type, payload}){
         case FETCH_EVENT:
             return {
                 ...state,
-                events: payload.events,
+                events: [...state.events, ...payload.events],
                 moreEvents: payload.moreEvents
             }
         case LISTEN_TO_EVENT_CHAT:

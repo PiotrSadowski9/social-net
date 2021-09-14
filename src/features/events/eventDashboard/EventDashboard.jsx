@@ -14,10 +14,11 @@ import EventListItemPlaceholder from './EventListItemPlaceholder';
 export default function EventDashboard() {
     const limit = 2;
     const dispatch = useDispatch();
-    const {events} = useSelector(state => state.event); //pobieram dane ze Stora
+    const {events, moreEvents} = useSelector(state => state.event); //pobieram dane ze Stora
     const {loading} = useSelector(state => state.async);
     const {authenticated} = useSelector(state => state.auth);
-    const [lastDocSnapshot, setLastDocSnapshot] = useState(null)
+    const [lastDocSnapshot, setLastDocSnapshot] = useState(null);
+    const [loadingInitial, setLoadingInitial] = useState(false);
     const [predicate, setPredicate] = useState(
         new Map([
             ['startDate', new Date()],
@@ -30,8 +31,10 @@ export default function EventDashboard() {
     }
 
     useEffect(() => {
+        setLoadingInitial(true);
         dispatch(fetchEvents(predicate, limit)).then((lastVisible) => {
             setLastDocSnapshot(lastVisible);
+            setLoadingInitial(false)
         })
     }, [dispatch, predicate]);
 
@@ -44,14 +47,19 @@ export default function EventDashboard() {
     return (
         <Grid>
             <Grid.Column width={10}>
-            {loading &&
+            {loadingInitial &&
                 <>
                     <EventListItemPlaceholder/>
                     <EventListItemPlaceholder/>
                 </>
             }
                 <EventList events={events}/>
-                <Button onClick={handleFetchNextEvent} color='green' content='More...' floated='right'/>
+                <Button onClick={handleFetchNextEvent} 
+                        color='green' 
+                        content='More...' 
+                        floated='right' 
+                        loading={loading} 
+                        disabled={!moreEvents}/>
             </Grid.Column>
             <Grid.Column width={6}>
                 {authenticated && <EventsFeed/>}
