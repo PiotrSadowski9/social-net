@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Grid } from 'semantic-ui-react'
+import { Button, Grid, Loader } from 'semantic-ui-react'
 import { listenToEventsFromFirestore } from '../../../app/firestore/firestoreService';
 import useFirestoreCollection from '../../../app/hooks/useFirestoreCollection';
 import { fetchEvents, listenToEvents } from '../eventActions';
@@ -53,17 +53,19 @@ export default function EventDashboard() {
                     <EventListItemPlaceholder/>
                 </>
             }
-                <EventList events={events}/>
-                <Button onClick={handleFetchNextEvent} 
-                        color='green' 
-                        content='More...' 
-                        floated='right' 
-                        loading={loading} 
-                        disabled={!moreEvents}/>
+                <EventList  events={events}
+                            getNextEvents={handleFetchNextEvent}
+                            loading={loading}
+                            moreEvents={moreEvents}
+                />
+               
             </Grid.Column>
             <Grid.Column width={6}>
                 {authenticated && <EventsFeed/>}
                 <EventFilters predicate={predicate} setPredicate={handleSetPredicate} loading={loading}/>
+            </Grid.Column>
+            <Grid.Column width={10}>
+                <Loader active={loading}/>
             </Grid.Column>
         </Grid>
     )
