@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Grid, Loader } from 'semantic-ui-react'
-import { listenToEventsFromFirestore } from '../../../app/firestore/firestoreService';
-import useFirestoreCollection from '../../../app/hooks/useFirestoreCollection';
-import { fetchEvents, listenToEvents } from '../eventActions';
+import {  Grid, Loader } from 'semantic-ui-react'
+import { fetchEvents } from '../eventActions';
 import EventsFeed from '../EventsFeed';
 import EventFilters from './EventFilters';
 // import LoadingComponent from '../../../app/layout/LoadingComponent';

@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { Button, Confirm, Header, Segment} from 'semantic-ui-react';
-import { listenToEvents} from '../eventActions';
+import {  listenToSelectedEvent} from '../eventActions';
 import * as Yup from 'yup';
 import MyTextInput from '../../../app/common/form/MyTextInput';
 import MyTextArea from '../../../app/common/form/MyTextArea';
@@ -21,7 +21,7 @@ export default function EventForm({match,history}) {
     const dispatch = useDispatch(); //dane ze stora
     const [loadingCancel, setLoadingCancel] = useState(false);//Confirm button
     const [confirmOpen, setconfirmOpen] = useState(false)//confirm button
-    const selectedEvent = useSelector(state => state.event.events.find(e => e.id === match.params.id)) //wybieram konkretny event ze stora w oparciu o id eventu
+    const {selectedEvent} = useSelector(state => state.event) //wybieram konkretny event 
     
     const {loading, error} = useSelector((state) => state.async)
 
@@ -58,7 +58,7 @@ export default function EventForm({match,history}) {
     useFirestoreDoc({ // próba pobrania eventu ze stora, to jest useEffect
         shouldExecute: !!match.params.id,
         query: () => listenToEventFromFirestore(match.params.id),
-        data: (event) => dispatch(listenToEvents([event])),
+        data: (event) => dispatch(listenToSelectedEvent(event)),
         deps: [match.params.id, dispatch] //Jesli zmienimy Id, wywolujemy ponownie funkcję
     });
 
