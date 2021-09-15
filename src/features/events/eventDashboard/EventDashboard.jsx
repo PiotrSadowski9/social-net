@@ -35,7 +35,10 @@ export default function EventDashboard() {
         dispatch(fetchEvents(predicate, limit)).then((lastVisible) => {
             setLastDocSnapshot(lastVisible);
             setLoadingInitial(false)
-        })
+        });
+        return () => {
+            dispatch(clearEvents());
+        }
     }, [dispatch, predicate]);
 
     function handleFetchNextEvent() {
