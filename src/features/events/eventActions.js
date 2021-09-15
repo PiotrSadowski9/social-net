@@ -1,4 +1,4 @@
-import { CREATE_EVENT, DELETE_EVENT, FETCH_EVENT, UPDATE_EVENT,LISTEN_TO_EVENT_CHAT, LISTEN_TO_SELECTED_EVENT } from "./eventConstants";
+import { CREATE_EVENT, DELETE_EVENT, FETCH_EVENT, UPDATE_EVENT,LISTEN_TO_EVENT_CHAT, LISTEN_TO_SELECTED_EVENT, CLEAR_EVENTS } from "./eventConstants";
 import {asyncActionError, asyncActionFinish, asyncActionStart} from '../../app/async/asyncReducer';
 import { dataFromSnapshot, fetchToEventsFromFirestore } from "../../app/firestore/firestoreService";
 
@@ -49,5 +49,11 @@ export function listenToEventChat(comments) {
     return {
         type: LISTEN_TO_EVENT_CHAT,
         payload: comments
+    }
+}
+
+export function clearEvents() {
+    return {
+        type: CLEAR_EVENTS,
     }
 }

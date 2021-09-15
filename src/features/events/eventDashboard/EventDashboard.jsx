@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {  Grid, Loader } from 'semantic-ui-react'
-import { fetchEvents } from '../eventActions';
+import { clearEvents, fetchEvents } from '../eventActions';
 import EventsFeed from '../EventsFeed';
 import EventFilters from './EventFilters';
 // import LoadingComponent from '../../../app/layout/LoadingComponent';
@@ -25,6 +25,8 @@ export default function EventDashboard() {
     );
 
     function handleSetPredicate(key, value) {
+        dispatch(clearEvents());
+        setLastDocSnapshot(null);
         setPredicate(new Map(predicate.set(key, value)))
     }
 
