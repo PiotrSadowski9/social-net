@@ -15,10 +15,9 @@ export default function EventDetailedPage({match}) {
     const dispatch = useDispatch();
     const { currentUser} = useSelector((state) => state.auth);
     const event = useSelector(state => state.event.selectedEvent) //
-    
     const {loading, error} = useSelector(state => state.async);
-    const isHost = event?.hostUid === currentUser.uid;
-    const isGoing = event?.attendees?.some(a => a.id === currentUser.uid);
+    const isHost = event?.hostUid === currentUser?.uid; //Optional chaining
+    const isGoing = event?.attendees?.some(a => a.id === currentUser?.uid); //Optional chaining
 
 
     useFirestoreDoc({ // próba pobrania eventu ze stora, to jest useEffect
