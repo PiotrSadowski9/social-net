@@ -1,14 +1,23 @@
 import React from 'react'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Divider, Modal } from 'semantic-ui-react';
 import { openModal } from '../../app/common/modals/modalReducer';
 
-export default function UnauthModal() {
+export default function UnauthModal({history}) {
     const [open, setOpen] = useState(true);
+    const {prevLocation} = useSelector((state) => state.auth)
     const dispatch = useDispatch();
 
     function handleClose(){
+
+        if (history && prevLocation) {
+            history.push(prevLocation.pathname);
+        } else {
+            history.push('/events')
+            console.log("dupa")
+        }
+        
         setOpen(false);
     }
     return (

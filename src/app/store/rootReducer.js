@@ -5,10 +5,12 @@ import modalReducer from '../common/modals/modalReducer'
 import authReducer from '../../features/auth/authReducer'
 import asyncReducer from '../async/asyncReducer'
 import profileReducer from '../../features/profiles/profileReducer'
+import {connectRouter} from 'connected-react-router'
 
 
 
-const rootReducer = combineReducers({  //zamieniam obiekt z dwiema wartościami reducerów na jeden reducer
+const rootReducer = (history) => combineReducers({  //zamieniam obiekt z dwiema wartościami reducerów na jeden reducer
+    router: connectRouter(history),
     test: testReducer,
     event: eventReducer,
     modals:modalReducer,
