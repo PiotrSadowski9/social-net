@@ -1,9 +1,11 @@
 import { format } from 'date-fns';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import {Segment, Image, Item, Header, Button} from 'semantic-ui-react';
 import { addUserAttendance, cancelUserAttendance } from '../../../app/firestore/firestoreService';
+import UnauthModal from '../../auth/UnauthModal';
 
 const eventImageStyle = {
     filter: 'brightness(30%)'
@@ -21,6 +23,8 @@ const eventImageTextStyle = {
 
 export default function EventDetailedHeader({event, isHost, isGoing}) {
     const [loading, setLoading] = useState(false);
+    const {authenticated} = useSelector((state) => state.auth);
+    const [modalOpen, setModalOpen] = useState(false);
 
     async function handleUserJoinEvent() {
         setLoading(true);
@@ -45,7 +49,11 @@ export default function EventDetailedHeader({event, isHost, isGoing}) {
     }
 
     return (
-        <Segment.Group>
+        <>
+            {modalOpen && 
+                <UnauthModal setModalOpen={setModalOpen}/>
+            }
+            <Segment.Group>
             <Segment basic attached="top" style={{padding: '0'}}>
                 <Image src={`/assets/categoryImages/${event.category}.jpg`} fluid style={eventImageStyle} />
 
@@ -74,7 +82,7 @@ export default function EventDetailedHeader({event, isHost, isGoing}) {
                 {isGoing ? (
                         <Button onClick={handleUserLeaveEvent}>Cancel My Place</Button>
                 ):(
-                         <Button onClick={handleUserJoinEvent} loading={loading} color="teal">JOIN THIS EVENT</Button>)}
+                         <Button onClick={authenticated ? handleUserJoinEvent : () => setModalOpen(true)} loading={loading} color="teal">JOIN THIS EVENT</Button>)}
                     
                    
                 </>
@@ -85,5 +93,7 @@ export default function EventDetailedHeader({event, isHost, isGoing}) {
                 </Button>}
             </Segment>
         </Segment.Group>
+        </>
+        
     )
 }
