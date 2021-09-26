@@ -23,24 +23,24 @@ export function dataFromSnapshot(snapshot) {
     }
 }
 
-export function fetchToEventsFromFirestore(predicate, limit, lastDocSnapshot = null) {
+export function fetchToEventsFromFirestore(filter, startDate, limit, lastDocSnapshot = null) {
     const user = firebase.auth().currentUser;
     let eventsRef = db.collection('events').orderBy('date').startAfter(lastDocSnapshot).limit(limit) //Sprawdzam czy działa, segreguję po dacie
     
-    switch (predicate.get('filter')) { //filtruję eventy
+    switch (filter) { //filtruję eventy
         case 'isGoing':
             
             return eventsRef
                 .where('attendeeIds', 'array-contains', user.uid)
-                .where('date', '>=', predicate.get('startDate'));
+                .where('date', '>=', startDate);
         case 'isHost':
           
             return eventsRef
                 .where('hostUid', '==', user.uid)
-                .where('date', '>=', predicate.get('startDate'));
+                .where('date', '>=', startDate);
         default:
             
-            return eventsRef.where('date', '>=', predicate.get('startDate'));
+            return eventsRef.where('date', '>=', startDate);
     }
 }
 
