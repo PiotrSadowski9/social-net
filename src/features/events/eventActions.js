@@ -1,4 +1,4 @@
-import { CREATE_EVENT, SET_FILTER, DELETE_EVENT, FETCH_EVENT, UPDATE_EVENT,LISTEN_TO_EVENT_CHAT, LISTEN_TO_SELECTED_EVENT, CLEAR_EVENTS, SET_START_DATE } from "./eventConstants";
+import { CREATE_EVENT, SET_FILTER, DELETE_EVENT, FETCH_EVENT, UPDATE_EVENT,LISTEN_TO_EVENT_CHAT, LISTEN_TO_SELECTED_EVENT, CLEAR_EVENTS, SET_START_DATE, CLEAR_TO_SELECTED_EVENT } from "./eventConstants";
 import {asyncActionError, asyncActionFinish, asyncActionStart} from '../../app/async/asyncReducer';
 import { dataFromSnapshot, fetchToEventsFromFirestore } from "../../app/firestore/firestoreService";
 
@@ -37,6 +37,12 @@ export function listenToSelectedEvent(event) {
     return {
         type: LISTEN_TO_SELECTED_EVENT,
         payload:event
+    }
+}
+
+export function clearSelectedEvent() {
+    return {
+        type: CLEAR_TO_SELECTED_EVENT
     }
 }
 

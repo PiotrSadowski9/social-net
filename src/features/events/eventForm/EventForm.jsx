@@ -1,10 +1,10 @@
 
 import { Formik, Form } from 'formik';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { Button, Confirm, Header, Segment} from 'semantic-ui-react';
-import {  listenToSelectedEvent} from '../eventActions';
+import {  clearSelectedEvent, listenToSelectedEvent} from '../eventActions';
 import * as Yup from 'yup';
 import MyTextInput from '../../../app/common/form/MyTextInput';
 import MyTextArea from '../../../app/common/form/MyTextArea';
@@ -16,14 +16,19 @@ import useFirestoreDoc from '../../../app/hooks/useFirestoreDoc';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { toast } from 'react-toastify';
 
-export default function EventForm({match,history}) {
+export default function EventForm({match,history, location}) {
     
     const dispatch = useDispatch(); //dane ze stora
     const [loadingCancel, setLoadingCancel] = useState(false);//Confirm button
     const [confirmOpen, setconfirmOpen] = useState(false)//confirm button
     const {selectedEvent} = useSelector(state => state.event) //wybieram konkretny event 
-    
     const {loading, error} = useSelector((state) => state.async)
+
+    useEffect(() => {
+        if(location.pathname !== '/createEvent') return;
+        dispatch(clearSelectedEvent());
+
+    },[dispatch, location.pathname])
 
     const initialValues = selectedEvent ?? { //ustawiam initialValues na pobrane dane ze Stora albo na pusty formularz
         title:'',
@@ -56,7 +61,7 @@ export default function EventForm({match,history}) {
     }
 
     useFirestoreDoc({ // próba pobrania eventu ze stora, to jest useEffect
-        shouldExecute: !!match.params.id,
+        shouldExecute: match.params.id !== selectedEvent?.id && location.pathname !== '/createEvent',
         query: () => listenToEventFromFirestore(match.params.id),
         data: (event) => dispatch(listenToSelectedEvent(event)),
         deps: [match.params.id, dispatch] //Jesli zmienimy Id, wywolujemy ponownie funkcję
@@ -73,6 +78,7 @@ export default function EventForm({match,history}) {
         <Segment clearing>
             
             <Formik
+                enableReinitialize
                 initialValues={initialValues}
                 validationSchema={validationSchema}
                 onSubmit={async (values, {setSubmitting}) => {
@@ -105,6 +111,7 @@ export default function EventForm({match,history}) {
                         showTimeSelect
                         timeCaption='time'
                         dateFormat='MMMM d, yyyy h:mm a'
+                        autoComplete='off'
                         />
                      {selectedEvent &&
                         <Button 
